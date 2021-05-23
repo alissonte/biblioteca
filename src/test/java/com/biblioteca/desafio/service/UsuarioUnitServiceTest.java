@@ -20,7 +20,7 @@ import com.biblioteca.desafio.entities.Usuario;
 import com.biblioteca.desafio.repository.UsuarioRepository;
 
 @RunWith(JUnitPlatform.class)
-class UsuarioServiceTest {
+class UsuarioUnitServiceTest {
 	
 	@InjectMocks
 	private UsuarioService usuarioService;	
