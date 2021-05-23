@@ -7,11 +7,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@Builder
 @AllArgsConstructor
 @Entity
+@EqualsAndHashCode(of = {"roleName"})
 @Table(name = "tb_role")
 public class Role {
 	

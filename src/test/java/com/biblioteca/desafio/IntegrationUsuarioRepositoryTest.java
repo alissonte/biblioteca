@@ -1,6 +1,7 @@
 package com.biblioteca.desafio;
 
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.LocalDateTime;
@@ -79,7 +80,6 @@ public class IntegrationUsuarioRepositoryTest {
         assertEquals(roles.size(), usuario2.getRoles().size());
     }
 	
-	
 	@Test	
     public void givenUsuario_whenDelete_thenGetOk() {
 		usuarioRepository.save(usuario);
@@ -91,5 +91,22 @@ public class IntegrationUsuarioRepositoryTest {
         Usuario result = usuarioRepository.findByEmail(email);
         
         assertNull(result);
+    }
+	
+	@Test	
+    public void givenUsuarioWithRoles_whenSave_thenGetOk() {
+		Set<Role> newRoles = new HashSet<>();
+		Role r = Role.builder().roleName("ADMIN").build();
+		newRoles.add(r);
+		usuario.setRoles(newRoles);
+		
+		usuarioRepository.save(usuario);
+        
+        Usuario result = usuarioRepository.findByEmail(email);
+        
+        assertEquals(email, result.getEmail());
+        assertEquals(dataCriacao, result.getDataCriacao());
+        assertEquals(1, newRoles.size());
+        assertTrue(result.getRoles().contains(r));
     }
 }

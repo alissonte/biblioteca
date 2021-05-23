@@ -10,9 +10,11 @@ import javax.persistence.Table;
 import com.biblioteca.desafio.convertes.StatusLivroConverter;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 @AllArgsConstructor
 @Entity
 @Table(name = "tb_book")
@@ -24,10 +26,6 @@ public class Livro {
 	private Long id;
 	
 	private String titulo;
-	
-	private Integer quantidade;
-	
-	private boolean disponivel;
 	
 	@Convert(converter = StatusLivroConverter.class)
 	private StatusLivro status;

@@ -9,7 +9,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum StatusLivro {
 	
-	ALUGADO(1), DEVOLVIDO(2), REMOVIDO(3);
+	DISPONIVEL(1), ALUGADO(2), DEVOLVIDO(3), REMOVIDO(4);
 	
 	int status;
 	
