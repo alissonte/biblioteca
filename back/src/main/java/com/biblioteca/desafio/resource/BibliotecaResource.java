@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.biblioteca.desafio.dto.LivroBibliotecaDTO;
@@ -39,6 +40,12 @@ public class BibliotecaResource {
 	@DeleteMapping("/{idBiblioteca}/livro/{idLivro}")
 	public ResponseEntity deletaLivroBiblioteca(@PathVariable Long idBiblioteca, @PathVariable Long idLivro){
 		bibliotecaService.deletaLivroBiblioteca(idBiblioteca, idLivro);
+		return ResponseEntity.noContent().build();
+	}
+	
+	@GetMapping("{idBiblioteca}/livro/{idLivro}")
+	public ResponseEntity emprestimoLivroBiblioteca(@PathVariable Long idBiblioteca, @PathVariable Long idLivro, @RequestParam String email){
+		bibliotecaService.emprestimoLivroBiblioteca(idBiblioteca, idLivro, email);
 		return ResponseEntity.noContent().build();
 	}
 

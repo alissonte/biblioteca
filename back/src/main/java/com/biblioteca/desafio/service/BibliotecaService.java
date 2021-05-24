@@ -4,16 +4,15 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.biblioteca.desafio.common.BibliotecaErrorException;
 import com.biblioteca.desafio.dto.LivroBibliotecaDTO;
 import com.biblioteca.desafio.entities.Biblioteca;
 import com.biblioteca.desafio.entities.Categoria;
@@ -69,12 +68,6 @@ public class BibliotecaService {
 		return livro;
 	}
 	
-	
-	public void deletaLivroBiblioteca(Long idBiblioteca, Long idLivro) {
-		EstoqueLivroKey estoqueKey = EstoqueLivroKey.builder().bibliotecaId(idBiblioteca).livroId(idLivro).build();
-		estoqueLivroRepository.deleteById(estoqueKey);
-	}
-	
 	@Transactional
 	public void emprestimoLivroBiblioteca(Long idBiblioteca, Long idLivro, String email) {
 		Livro livro = livroRepository.getById(idLivro);
@@ -83,6 +76,12 @@ public class BibliotecaService {
 		
 		saveNovoEmprestimo(livro, usuario);
 		atualizaEstoqueBiblioteca(biblioteca, livro);
+	}
+	
+	
+	public void deletaLivroBiblioteca(Long idBiblioteca, Long idLivro) {
+		EstoqueLivroKey estoqueKey = EstoqueLivroKey.builder().bibliotecaId(idBiblioteca).livroId(idLivro).build();
+		estoqueLivroRepository.deleteById(estoqueKey);
 	}
 
 
@@ -124,13 +123,11 @@ public class BibliotecaService {
 				.livroId(livro.getId())
 				.build();
 		
-		EstoqueLivro estoqueLivro = estoqueLivroRepository.getById(estoqueKey);
-		if(Objects.isNull(estoqueLivro)) {
-			throw new EntityNotFoundException("Não existe nenhum livro na biblioteca!;");
-		} else {
-			estoqueLivro.setQuantidade((estoqueLivro.getQuantidade() - 1));
-			estoqueLivroRepository.save(estoqueLivro);
-		}
+		EstoqueLivro estoqueLivro = estoqueLivroRepository.findById(estoqueKey)
+				.orElseThrow(() -> new BibliotecaErrorException("Não existe nenhum livro na biblioteca!;"));
+		
+		estoqueLivro.setQuantidade((estoqueLivro.getQuantidade() - 1));
+		estoqueLivroRepository.save(estoqueLivro);
 	}
 
 	private Livro salvaNovoLivro(LivroBibliotecaDTO livroBibliotecaDTO) {
@@ -138,9 +135,9 @@ public class BibliotecaService {
 				.categoria(Categoria.valueOf(livroBibliotecaDTO.getCategoria()))
 				.status(StatusLivro.DISPONIVEL)
 				.titulo(livroBibliotecaDTO.getTitulo())
-				.build();
-		
+				.build();		
 		livro = livroRepository.save(livro);
+		
 		return livro;
 	}
 }
