@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Set;
 
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.biblioteca.desafio.convertes.StatusLivroConverter;
+import com.biblioteca.desafio.convertes.StatusUsuarioConverter;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,6 +38,9 @@ public class Usuario implements Serializable{
 	private String email;
 	
 	private LocalDateTime dataCriacao;
+	
+	@Convert(converter = StatusUsuarioConverter.class)
+	private StatusUsuario status;
 	
 	
 	@ManyToMany(fetch = FetchType.EAGER)

@@ -7,6 +7,7 @@ import javax.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.biblioteca.desafio.entities.StatusUsuario;
 import com.biblioteca.desafio.entities.Usuario;
 import com.biblioteca.desafio.repository.UsuarioRepository;
 
@@ -40,5 +41,27 @@ public class UsuarioService {
 			throw new EntityNotFoundException("Usuario não encontrado!");
 		}
 		usuarioRepository.deleteById(id);
+	}
+	
+	public void inativarUsuario(Long id) {
+		Usuario usuarioDb = usuarioRepository.getById(id);
+		if(usuarioDb == null) {
+			throw new EntityNotFoundException("Usuario não encontrado!");
+		}
+		
+		usuarioDb.setStatus(StatusUsuario.INATIVO);
+		
+		atualizaUsuario(id, usuarioDb);
+	}
+	
+	public void ativarUsuario(Long id) {
+		Usuario usuarioDb = usuarioRepository.getById(id);
+		if(usuarioDb == null) {
+			throw new EntityNotFoundException("Usuario não encontrado!");
+		}
+		
+		usuarioDb.setStatus(StatusUsuario.ATIVO);
+		
+		atualizaUsuario(id, usuarioDb);
 	}
 }

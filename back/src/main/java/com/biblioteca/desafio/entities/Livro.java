@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.biblioteca.desafio.convertes.CategoriaConverter;
 import com.biblioteca.desafio.convertes.StatusLivroConverter;
 
 import lombok.AllArgsConstructor;
@@ -32,6 +33,9 @@ public class Livro {
 	@Convert(converter = StatusLivroConverter.class)
 	private StatusLivro status;
 	
+	@Convert(converter = CategoriaConverter.class)
+	private Categoria categoria;
+	
 	@OneToMany(mappedBy = "livro")
-    Set<EstoqueLivro> livros;
+    private Set<EstoqueLivro> livros;
 }
